@@ -1,0 +1,40 @@
+name: Refresh TrainingPeaks Cookie
+
+on:
+  schedule:
+    # Jeden Montag um 04:00 UTC (=05:00 oder 06:00 Europe/Vienna, je nach Sommer-/Winterzeit)
+    - cron: "0 4 * * 1"
+  workflow_dispatch: {} # erlaubt manuellen Start über den "Run workflow"-Button
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install playwright requests
+          playwright install --with-deps chromium
+
+      - name: Extract fresh TrainingPeaks cookie
+        env:
+          TP_USERNAME: ${{ secrets.TP_USERNAME }}
+          TP_PASSWORD: ${{ secrets.TP_PASSWORD }}
+        run: python scripts/refresh_cookie.py --output cookie.txt
+
+      - name: Push cookie to Render and redeploy
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        run: python scripts/push_to_render.py --cookie-file cookie.txt
+
+      - name: Clean up
+        if: always()
+        run: rm -f cookie.txt
