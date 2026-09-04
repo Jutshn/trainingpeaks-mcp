@@ -4,8 +4,8 @@ services:
     env: python
     plan: free
     region: frankfurt
-    buildCommand: "pip install -e . mcp-proxy"
-    startCommand: "mcp-proxy --host=0.0.0.0 --port=$PORT --pass-environment --allow-origin='*' -- tp-mcp serve"
+    buildCommand: "pip install -e . fastmcp"
+    startCommand: "python proxy_server.py"
     envVars:
       # Wird NICHT im Blueprint gesetzt (sync: false = Wert manuell im Dashboard eintragen,
       # nicht im Git-Repo speichern). Der GitHub-Actions-Workflow aktualisiert ihn danach automatisch.
