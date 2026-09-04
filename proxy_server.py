@@ -6,8 +6,8 @@ erreichbar ist.
 
 import os
 
-from fastmcp import FastMCP
 from fastmcp.client.transports import StdioTransport
+from fastmcp.server import create_proxy
 
 backend = StdioTransport(
     command="tp-mcp",
@@ -15,7 +15,7 @@ backend = StdioTransport(
     env=dict(os.environ),  # gibt TP_AUTH_COOKIE etc. an den Subprozess weiter
 )
 
-proxy = FastMCP.as_proxy(backend, name="trainingpeaks-proxy")
+proxy = create_proxy(backend, name="trainingpeaks-proxy")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
