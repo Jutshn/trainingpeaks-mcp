@@ -38,7 +38,7 @@ def main() -> int:
         context = browser.new_context()
         page = context.new_page()
 
-        page.goto(LOGIN_URL, wait_until="networkidle")
+        page.goto(LOGIN_URL, wait_until="domcontentloaded", timeout=60000)
 
         # --- Login-Formular ---
         # Diese Selektoren sind ein plausibler Startpunkt, aber ungetestet.
@@ -48,7 +48,7 @@ def main() -> int:
         page.click("button[type='submit']")
 
         # Warten, bis der Login durch ist (Redirect auf app.trainingpeaks.com o.ä.)
-        page.wait_for_load_state("networkidle", timeout=30000)
+        page.wait_for_url("**/app.trainingpeaks.com/**", timeout=60000)
 
         cookies = context.cookies()
         target = next(
