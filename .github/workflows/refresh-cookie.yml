@@ -27,7 +27,7 @@ jobs:
         env:
           TP_USERNAME: ${{ secrets.TP_USERNAME }}
           TP_PASSWORD: ${{ secrets.TP_PASSWORD }}
-        run: run: python refresh_cookie.py --output cookie.txt
+        run: python refresh_cookie.py --output cookie.txt
 
       - name: Push cookie to Render and redeploy
         env:
