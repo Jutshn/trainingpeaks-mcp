@@ -27,13 +27,13 @@ jobs:
         env:
           TP_USERNAME: ${{ secrets.TP_USERNAME }}
           TP_PASSWORD: ${{ secrets.TP_PASSWORD }}
-        run: run: python refresh_cookie.py --output cookie.txt
+        run: python refresh_cookie.py --output cookie.txt
 
       - name: Push cookie to Render and redeploy
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-        run: python scripts/push_to_render.py --cookie-file cookie.txt
+        run: python push_to_render.py --cookie-file cookie.txt
 
       - name: Clean up
         if: always()
