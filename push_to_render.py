@@ -51,8 +51,15 @@ def main() -> int:
         timeout=30,
     )
     r.raise_for_status()
-    deploy_id = r.json().get("id", "unbekannt")
-    print(f"Redeploy angestoßen (deploy id: {deploy_id}).")
+    print(f"Redeploy angestossen. Status: {r.status_code}")
+    if r.text.strip():
+        try:
+            deploy_id = r.json().get("id", "unbekannt")
+            print(f"Deploy ID: {deploy_id}")
+        except ValueError:
+            print(f"Antwort war kein JSON: {r.text[:200]}")
+    else:
+        print("Antwort war leer, Deploy wurde trotzdem angestossen (Status OK).")
 
     return 0
 
